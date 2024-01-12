@@ -1,45 +1,56 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Webcam from 'react-webcam';
-import { Avatar } from '@material-tailwind/react';
+import AuthService from '@/services/AuthService';
 
-const WebcamCapture = ({ onboarding }) => {
+const WebcamCapture = ({ onboarding, setOnboarding }) => {
   const webcamRef = useRef(null);
-  const [intervalId, setIntervalId] = useState(null);
-  const [imageSr, setImageSr] = useState(null);
+  const imagesRef = useRef([]);
 
-  const capture = React.useCallback(() => {
-    const imageSrc = webcamRef.current.getScreenshot();
-
-    setImageSr(imageSrc);
-    // Send this to the backend for facial recognition
-    // Add logic to handle the response from the backend
-
-    console.log('img');
-    console.log(imageSrc);
-  }, [webcamRef]);
+  const CAPTURE_INTERVAL = 1000; // Capture an image every 1000 ms (1 second)
+  const TOTAL_CAPTURE_TIME = 5000; // Total time for capturing images (10 seconds)
 
   useEffect(() => {
     if (onboarding) {
-      const id = setInterval(capture, 1000); // capture every second
-      setIntervalId(id);
-    } else {
-      if (intervalId) clearInterval(intervalId);
+      const interval = setInterval(() => {
+        const imageSrc = webcamRef.current.getScreenshot();
+        if (imageSrc) {
+          imagesRef.current.push(imageSrc);
+        }
+      }, CAPTURE_INTERVAL); // Capture an image every 1000 ms (1 second)
+
+      // Set a timeout to end the onboarding process
+      const timeout = setTimeout(() => {
+        clearInterval(interval);
+        sendImagesToBackend(imagesRef.current); // Send images stored in ref
+        imagesRef.current = []; // Reset the images ref
+        setOnboarding(false); // End the onboarding process
+      }, TOTAL_CAPTURE_TIME); // Total time for capturing images (10 seconds)
+
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+      };
     }
+  }, [onboarding, setOnboarding]);
 
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [onboarding, intervalId, capture]);
+  const sendImagesToBackend = async (imagesArray) => {
+    console.log(await imagesArray);
+    try {
+      await AuthService.recognize(imagesArray);
+    } catch (error) {
+      console.error('Error sending images to backend:', error);
+    }
+  };
 
-  return onboarding ? (
+  if (!onboarding) {
+    return null; // Don't render the webcam if not in onboarding mode
+  }
+
+  return (
     <div>
       <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
-      <button onClick={capture}>Capture photo</button>;
-      {onboarding && <p>Onboarding in progress...</p>}
-      {imageSr && <img src={imageSr} />}
+      <p>Onboarding in progress...</p>
     </div>
-  ) : (
-    <div></div>
   );
 };
 
