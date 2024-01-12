@@ -31,17 +31,15 @@ const WebcamCapture = ({ onboarding }) => {
     };
   }, [onboarding, intervalId, capture]);
 
-  return (
+  return onboarding ? (
     <div>
-      <Avatar
-        src="https://docs.material-tailwind.com/img/face-2.jpg"
-        alt="avatar"
-      />
       <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
       <button onClick={capture}>Capture photo</button>;
       {onboarding && <p>Onboarding in progress...</p>}
       {imageSr && <img src={imageSr} />}
     </div>
+  ) : (
+    <div></div>
   );
 };
 

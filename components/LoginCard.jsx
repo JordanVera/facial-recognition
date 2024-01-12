@@ -1,14 +1,35 @@
-import { Input, Button } from '@material-tailwind/react';
+import { Input, Button, Avatar } from '@material-tailwind/react';
 
-const LoginCard = () => {
+const LoginCard = ({ onBoarding, setOnboarding }) => {
   return (
-    <div className="bg-gray-700 w-96 h-96 rounded-xl">
-      LoginCard
-      <div className="flex flex-col space-y-5">
-        <Input label="Username" color="white" />
-        <Input label="Password" color="white" type="password" />
-        <Button variant="gradient" color="orange" size="sm" className="w-full">
+    <div className="neu-container w-96 h-96 rounded-xl p-5">
+      <div className="flex flex-col space-y-5 h-full justify-center">
+        <Avatar
+          src="/media/selfie2.png"
+          alt="avatar"
+          size="xl"
+          className="mx-auto bg-gray-700"
+        />
+        <Input label="Username" />
+        <Input label="Password" type="password" />
+        <Button
+          variant="gradient"
+          color="black"
+          size="sm"
+          className="w-full capitalize"
+        >
           Submit
+        </Button>
+        <Button
+          variant="gradient"
+          color="black"
+          size="sm"
+          className="w-full capitalize"
+          onClick={() => {
+            setOnboarding(true);
+          }}
+        >
+          Begin facial recognition
         </Button>
       </div>
     </div>
