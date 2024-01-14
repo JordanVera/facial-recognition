@@ -2,7 +2,7 @@ import { Input, Button, Avatar } from '@material-tailwind/react';
 
 const LoginCard = ({ onBoarding, setOnboarding }) => {
   return (
-    <div className="neu-container w-96 h-96 rounded-xl p-5">
+    <div className="w-96 h-96 rounded-xl p-5">
       <div className="flex flex-col space-y-5 h-full justify-center">
         <Avatar
           src="/media/selfie2.png"

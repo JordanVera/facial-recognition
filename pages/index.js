@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-center p-24 ${inter.className} bg-[#55b9f3]`}
+      className={`flex min-h-screen flex-col items-center justify-center p-24 ${inter.className} bg-[#121212]`}
     >
       <LoginCard setOnboarding={setOnboarding} />
 
