@@ -58,6 +58,41 @@ export default async function handler(req, res) {
     // Implement your recognition logic here using facialFeatures
     // ...
 
+
+    function euclideanDistance(descriptor1, descriptor2) {
+      return Math.sqrt(
+        descriptor1
+          .map((val, idx) => val - descriptor2[idx])
+          .reduce((sum, diff) => sum + diff * diff, 0)
+      );
+    }
+    
+    // Function to find the best match for a given face descriptor
+    function findBestMatch(faceDescriptor) {
+      let bestMatch = { name: 'Unknown', distance: Infinity };
+      knownFaces.forEach((knownFace) => {
+        const distance = euclideanDistance(faceDescriptor, knownFace.descriptors);
+        if (distance < bestMatch.distance) {
+          bestMatch = { name: knownFace.name, distance };
+        }
+      });
+      return bestMatch;
+    }
+    
+    // Recognition logic
+    for (const detection of facialFeatures) {
+      if (detection.length > 0) {
+        const faceDescriptor = detection[0].descriptor; // Assuming one face per image for simplicity
+        const bestMatch = findBestMatch(faceDescriptor);
+        if (bestMatch.distance < yourThreshold) { // Define yourThreshold based on your accuracy needs
+          console.log(`Recognized: ${bestMatch.name}`);
+        } else {
+          console.log('Face not recognized or not confident enough');
+        }
+      }
+
+
+
     res.status(200).json({ recognized: true, features: facialFeatures });
   }
 }
