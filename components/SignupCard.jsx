@@ -2,7 +2,7 @@ import { Input, Button, Avatar } from '@material-tailwind/react';
 
 const SignupCard = ({ onBoarding, setOnboarding }) => {
   return (
-    <div className="rounded-xl p-5 border-2 border-gray-800">
+    <div className="rounded-xl p-5 border-2 border-gray-900">
       <div className="flex flex-col space-y-5 h-full justify-center">
         <Avatar
           src="/media/selfie2.png"
@@ -17,7 +17,9 @@ const SignupCard = ({ onBoarding, setOnboarding }) => {
         </div>
 
         <Input label="Username" color="white" />
+        <Input label="Email" color="white" type="email" />
         <Input label="Password" color="white" type="password" />
+        <Input label="Confirm Password" color="white" type="password" />
         <Button
           variant="gradient"
           color="black"

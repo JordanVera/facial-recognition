@@ -31,7 +31,7 @@ const LoginCard = ({ onBoarding, setOnboarding, setLoginOrSignup }) => {
         >
           Signup
         </Button>
-        <Button
+        {/* <Button
           variant="gradient"
           color="black"
           size="sm"
@@ -41,7 +41,7 @@ const LoginCard = ({ onBoarding, setOnboarding, setLoginOrSignup }) => {
           }}
         >
           Begin facial recognition
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
