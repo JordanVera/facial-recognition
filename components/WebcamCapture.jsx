@@ -6,8 +6,8 @@ const WebcamCapture = ({ onboarding, setOnboarding }) => {
   const webcamRef = useRef(null);
   const imagesRef = useRef([]);
 
-  const CAPTURE_INTERVAL = 1000; // Capture an image every 1000 ms (1 second)
-  const TOTAL_CAPTURE_TIME = 5000; // Total time for capturing images (10 seconds)
+  const CAPTURE_INTERVAL = 1_000; // Capture an image every 1000 ms (1 second)
+  const TOTAL_CAPTURE_TIME = 10_000; // Total time for capturing images (10 seconds)
 
   useEffect(() => {
     if (onboarding) {
