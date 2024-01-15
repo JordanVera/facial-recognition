@@ -31,6 +31,7 @@ const LoginCard = ({ onBoarding, setOnboarding, setLoginOrSignup }) => {
         >
           Signup
         </Button>
+
         {/* <Button
           variant="gradient"
           color="black"
