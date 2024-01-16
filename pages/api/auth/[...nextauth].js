@@ -26,7 +26,7 @@ export default NextAuth({
     },
     async session({ session, user, token }) {
       // You can add more user data to the session here
-      session.userId = user.id;
+      session.user = user;
       return session;
     },
     // ...other callbacks

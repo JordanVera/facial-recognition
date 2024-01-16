@@ -1,4 +1,5 @@
 import { Input, Button, Avatar } from '@material-tailwind/react';
+import GithubSignupButton from './buttons/GithubSignupButton';
 
 const LoginCard = ({ onBoarding, setOnboarding, setLoginOrSignup }) => {
   return (
@@ -12,6 +13,7 @@ const LoginCard = ({ onBoarding, setOnboarding, setLoginOrSignup }) => {
         />
         <Input label="Username" color="white" />
         <Input label="Password" color="white" type="password" />
+        <GithubSignupButton />
         <Button
           variant="gradient"
           color="black"

@@ -33,7 +33,7 @@ model Account {
   id                 Int       @id @default(autoincrement())
   userId             Int       @map("userId")
   providerType       String    @map("providerType")
-  providerId         String    @map("providerId")
+  provider           String    @map("provider")
   providerAccountId  String    @map("providerAccountId")
   refreshToken       String?   @map("refreshToken")
   accessToken        String?   @map("accessToken")
@@ -43,7 +43,7 @@ model Account {
 
   user User @relation(fields: [userId], references: [id])
 
-  @@unique([providerId, providerAccountId])
+  @@unique([provider, providerAccountId])
   @@map("accounts")
 }
 
