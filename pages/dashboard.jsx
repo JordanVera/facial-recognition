@@ -2,6 +2,7 @@
 import { useSession, signIn } from 'next-auth/react';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Appbar from '../components/Appbar';
 
 const Dashboard_Protected = () => {
   const { data: session, status } = useSession();
@@ -18,6 +19,7 @@ const Dashboard_Protected = () => {
 
   return (
     <div>
+      <Appbar />
       <h1>Protected Page</h1>
       {/* Your protected content here */}
     </div>
