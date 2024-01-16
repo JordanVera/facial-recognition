@@ -11,28 +11,8 @@ const LoginCard = ({ onBoarding, setOnboarding, setLoginOrSignup }) => {
           size="xl"
           className="mx-auto bg-gray-700"
         />
-        <Input label="Username" color="white" />
-        <Input label="Password" color="white" type="password" />
+
         <GithubSignupButton />
-        <Button
-          variant="gradient"
-          color="black"
-          size="sm"
-          className="w-full capitalize"
-        >
-          Submit
-        </Button>
-        <Button
-          variant="gradient"
-          color="orange"
-          size="sm"
-          className="w-full capitalize"
-          onClick={() => {
-            setLoginOrSignup('signup');
-          }}
-        >
-          Signup
-        </Button>
 
         {/* <Button
           variant="gradient"

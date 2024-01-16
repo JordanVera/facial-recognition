@@ -4,8 +4,8 @@ import { Button } from '@material-tailwind/react';
 function GithubSignupButton() {
   return (
     <Button
-      size="lg"
-      className="bg-gradient-to-b from-gray-900 to-black group relative flex items-center gap-3 overflow-hidden px-3 py-5 capitalize"
+      size="sm"
+      className="bg-gradient-to-b from-gray-900 to-black group relative flex items-center gap-3 overflow-hidden px-3 py-3 capitalize"
       onClick={() => signIn('github', { callbackUrl: '/dashboard' })}
     >
       Sign in with Github

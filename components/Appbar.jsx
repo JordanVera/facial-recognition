@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
@@ -15,7 +16,7 @@ function classNames(...classes) {
 }
 
 export default function Appbar() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   return (
     <Disclosure as="nav" className="bg-gray-900">
@@ -115,7 +116,7 @@ export default function Appbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            onClick={() => signOut({ callbackUrl: '/' })}
                             className={classNames(
                               active ? 'bg-gray-100' : '',
                               'block px-4 py-2 text-sm text-gray-700'
