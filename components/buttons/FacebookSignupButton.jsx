@@ -11,8 +11,8 @@ const FacebookSignupButton = () => {
       Sign in with Facebook
       <span className="absolute right-0 grid h-full w-12 place-items-center bg-blue-500 transition-colors ">
         <img
-          src="/icons/github-mark-white.svg"
-          alt="github icon"
+          src="/icons/facebook.png"
+          alt="faecbook icon"
           className="h-6 w-6"
         />
       </span>
