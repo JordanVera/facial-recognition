@@ -41,6 +41,7 @@ model Account {
   token_type         String?   @map("token_type")
   scope              String?   @map("scope")
   accessTokenExpires DateTime? @map("accessTokenExpires")
+  expires_at         DateTime? @map("expires_at")
   createdAt          DateTime  @default(now()) @map("createdAt")
   updatedAt          DateTime  @updatedAt @map("updatedAt")
 
