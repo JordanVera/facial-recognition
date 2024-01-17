@@ -40,6 +40,7 @@ model Account {
   access_token       String?   @map("access_token") @db.Text
   token_type         String?   @map("token_type")
   scope              String?   @map("scope")
+  id_token           String?   @map("id_token") @db.Text
   accessTokenExpires DateTime? @map("accessTokenExpires")
   expires_at         BigInt?   @map("expires_at")
   createdAt          DateTime  @default(now()) @map("createdAt")
