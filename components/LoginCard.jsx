@@ -1,6 +1,7 @@
 import { Input, Button, Avatar } from '@material-tailwind/react';
 import GithubSignupButton from './buttons/GithubSignupButton';
 import FacebookSignupButton from './buttons/FacebookSignupButton';
+import GoogleSignupButton from './buttons/GoogleSignupButton';
 
 const LoginCard = ({ onBoarding, setOnboarding, setLoginOrSignup }) => {
   return (
@@ -15,6 +16,7 @@ const LoginCard = ({ onBoarding, setOnboarding, setLoginOrSignup }) => {
 
         <GithubSignupButton />
         <FacebookSignupButton />
+        <GoogleSignupButton />
 
         {/* <Button
           variant="gradient"
