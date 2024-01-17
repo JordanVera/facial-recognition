@@ -14,11 +14,11 @@ const LoginCard = ({ onBoarding, setOnboarding, setLoginOrSignup }) => {
           className="mx-auto bg-gray-700"
         />
 
-        <GithubSignupButton />
-        <FacebookSignupButton />
         <GoogleSignupButton />
+        <FacebookSignupButton />
+        <GithubSignupButton />
 
-        {/* <Button
+        <Button
           variant="gradient"
           color="black"
           size="sm"
@@ -28,7 +28,7 @@ const LoginCard = ({ onBoarding, setOnboarding, setLoginOrSignup }) => {
           }}
         >
           Begin facial recognition
-        </Button> */}
+        </Button>
       </div>
     </div>
   );
