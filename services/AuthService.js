@@ -5,14 +5,14 @@ class AuthService {
 
   // Define methods for interacting with the API here
 
-  async recognize(images, user) {
+  async recognize(images) {
     try {
       const response = await fetch(`http://localhost:3000/api/recognize`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ images, user }),
+        body: JSON.stringify({ images }),
       });
       return response.json();
     } catch (error) {

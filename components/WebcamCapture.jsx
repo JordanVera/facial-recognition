@@ -39,7 +39,7 @@ const WebcamCapture = ({ onboarding, setOnboarding }) => {
   const sendImagesToBackend = async (imagesArray) => {
     console.log(await imagesArray);
     try {
-      await AuthService.recognize(imagesArray, session.user);
+      await AuthService.recognize(imagesArray);
     } catch (error) {
       console.error('Error sending images to backend:', error);
     }

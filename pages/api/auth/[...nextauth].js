@@ -8,7 +8,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export default NextAuth({
+export const authOptions = {
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -42,4 +42,6 @@ export default NextAuth({
   },
 
   // Additional NextAuth configuration...
-});
+};
+
+export default NextAuth(authOptions);

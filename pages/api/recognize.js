@@ -2,10 +2,11 @@
 import colors from 'colors';
 import * as faceapi from '@vladmandic/face-api';
 import prisma from '../../lib/prisma';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from './auth/[...nextauth]';
 
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
     // Not signed in
@@ -15,9 +16,11 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const { images, user } = req.body;
+    const { images } = req.body;
 
     const tf = await import('@tensorflow/tfjs-node');
+
+    const user = session.user;
 
     // console.log('______________IMAGES______________'.rainbow.bold);
     // console.log(images);
