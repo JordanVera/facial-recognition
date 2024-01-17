@@ -1,8 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import AuthService from '@/services/AuthService';
+import { useSession } from 'next-auth/react';
 
 const WebcamCapture = ({ onboarding, setOnboarding }) => {
+  const { data: session } = useSession();
+
   const webcamRef = useRef(null);
   const imagesRef = useRef([]);
 
@@ -36,7 +39,7 @@ const WebcamCapture = ({ onboarding, setOnboarding }) => {
   const sendImagesToBackend = async (imagesArray) => {
     console.log(await imagesArray);
     try {
-      await AuthService.recognize(imagesArray);
+      await AuthService.recognize(imagesArray, session.user);
     } catch (error) {
       console.error('Error sending images to backend:', error);
     }

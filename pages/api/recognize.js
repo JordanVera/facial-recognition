@@ -1,20 +1,32 @@
 // pages/api/recognize.js
 import colors from 'colors';
 import * as faceapi from '@vladmandic/face-api';
+import prisma from '../../lib/prisma';
+import { getSession } from 'next-auth/react';
 
 export default async function handler(req, res) {
-  // Load TensorFlow.js model
-  // const model = await faceLandmarksDetection.load(
-  //   faceLandmarksDetection.SupportedPackages.mediapipeFacemesh
-  // );
+  const session = await getSession({ req });
+
+  if (!session) {
+    // Not signed in
+    return res
+      .status(401)
+      .json({ error: 'You must be signed in to access this API route' });
+  }
 
   if (req.method === 'POST') {
-    const { images } = req.body;
+    const { images, user } = req.body;
 
     const tf = await import('@tensorflow/tfjs-node');
 
     // console.log('______________IMAGES______________'.rainbow.bold);
     // console.log(images);
+
+    // You can access user's email, name, image, etc., if they are included in the session
+    console.log('USER FROM SERVER'.rainbow.bold);
+    console.log(user);
+    console.log(user.email, user.name);
+
     console.log('______________IMAGES.length______________'.rainbow.bold);
     console.log(images.length);
 
@@ -24,7 +36,7 @@ export default async function handler(req, res) {
     await faceapi.nets.faceLandmark68Net.loadFromDisk('./models');
     await faceapi.nets.faceRecognitionNet.loadFromDisk('./models');
 
-    let facialFeatures = [];
+    let facialDescriptors = [];
 
     for (const imgBase64 of images) {
       // Decode each base64 image to a tensor
@@ -42,59 +54,28 @@ export default async function handler(req, res) {
         .withFaceDescriptors();
 
       // Add processed data to facialFeatures array
-      facialFeatures.push(detections);
-
-      // Dispose the tensor to free memory
-      // imgTensor.dispose();
-    }
-
-    const filteredFacialFeatures = facialFeatures.filter((f) => f.length > 0);
-
-    console.log('FACIAL FEATURES'.rainbow.bold);
-    console.log(filteredFacialFeatures);
-    console.log(filteredFacialFeatures.map((f) => f[0].descriptor));
-    // console.log(facialFeatures.map((f) => f[0].landmarks));
-
-    // Implement your recognition logic here using facialFeatures
-    // ...
-
-    function euclideanDistance(descriptor1, descriptor2) {
-      return Math.sqrt(
-        descriptor1
-          .map((val, idx) => val - descriptor2[idx])
-          .reduce((sum, diff) => sum + diff * diff, 0)
-      );
-    }
-
-    // Function to find the best match for a given face descriptor
-    function findBestMatch(faceDescriptor) {
-      let bestMatch = { name: 'Unknown', distance: Infinity };
-      knownFaces.forEach((knownFace) => {
-        const distance = euclideanDistance(
-          faceDescriptor,
-          knownFace.descriptors
-        );
-        if (distance < bestMatch.distance) {
-          bestMatch = { name: knownFace.name, distance };
-        }
-      });
-      return bestMatch;
-    }
-
-    // Recognition logic
-    for (const detection of facialFeatures) {
-      if (detection.length > 0) {
-        const faceDescriptor = detection[0].descriptor; // Assuming one face per image for simplicity
-        const bestMatch = findBestMatch(faceDescriptor);
-        if (bestMatch.distance < yourThreshold) {
-          // Define yourThreshold based on your accuracy needs
-          console.log(`Recognized: ${bestMatch.name}`);
-        } else {
-          console.log('Face not recognized or not confident enough');
-        }
+      if (detections) {
+        facialDescriptors.push(detections.descriptor);
       }
 
-      res.status(200).json({ recognized: true, features: facialFeatures });
+      // Dispose the tensor to free memory
+      tf.dispose(imgTensor);
     }
+
+    const descriptorsString = JSON.stringify(facialDescriptors);
+
+    // Store in database
+    await prisma.knownFaces.upsert({
+      where: { userId: userId },
+      update: { descriptors: descriptorsString },
+      create: { userId: userId, descriptors: descriptorsString },
+    });
+
+    res.status(200).json({ message: 'Facial data stored successfully' });
+    console.log('FACIAL FEATURES'.rainbow.bold);
+    console.log(facialDescriptors);
+    console.log(facialDescriptors.map((f) => f[0].descriptor));
+
+    res.status(200).json({ recognized: true, features: facialDescriptors });
   }
 }
