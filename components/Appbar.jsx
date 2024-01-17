@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import { Avatar } from '@material-tailwind/react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useSession } from 'next-auth/react';
@@ -40,7 +41,7 @@ export default function Appbar() {
                 <div className="flex flex-shrink-0 items-center">
                   <img
                     className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                    src="/logoWhite.svg"
                     alt="Your Company"
                   />
                 </div>
@@ -70,9 +71,9 @@ export default function Appbar() {
                     <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src={session.user.image}
+                      <Avatar
+                        className="h-10 w-10 "
+                        src={session?.user?.image || '/avatar.png'}
                         alt=""
                       />
                     </Menu.Button>
