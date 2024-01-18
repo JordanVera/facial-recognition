@@ -69,9 +69,9 @@ export default async function handler(req, res) {
 
     // Store in database
     await prisma.knownFaces.upsert({
-      where: { userId: userId },
+      where: { userId: user.id },
       update: { descriptors: descriptorsString },
-      create: { userId: userId, descriptors: descriptorsString },
+      create: { userId: user.id, descriptors: descriptorsString },
     });
 
     res.status(200).json({ message: 'Facial data stored successfully' });

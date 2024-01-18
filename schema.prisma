@@ -10,8 +10,10 @@ generator client {
 model KnownFaces {
   id          Int    @id @default(autoincrement())
   userId      Int    @unique
-  image       String
-  descriptors String // Storing descriptors as a string
+  image       String?
+  descriptors String @db.Text
+  
+  // Storing descriptors as a string
 
   user User @relation(fields: [userId], references: [id])
 
