@@ -4,12 +4,13 @@ import * as faceapi from '@vladmandic/face-api';
 import prisma from '../../lib/prisma';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from './auth/[...nextauth]';
+import * as tf from '@tensorflow/tfjs-node';
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
+  const user = session.user;
 
   if (!session) {
-    // Not signed in
     return res
       .status(401)
       .json({ error: 'You must be signed in to access this API route' });
@@ -18,67 +19,47 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { images } = req.body;
 
-    const tf = await import('@tensorflow/tfjs-node');
-
-    const user = session.user;
-
-    // console.log('______________IMAGES______________'.rainbow.bold);
-    // console.log(images);
-
-    // You can access user's email, name, image, etc., if they are included in the session
-    console.log('USER FROM SERVER'.rainbow.bold);
-    console.log(user);
-    console.log(user.email, user.name);
-
-    console.log('______________IMAGES.length______________'.rainbow.bold);
-    console.log(images.length);
-
     // Load the face-api models
-
     await faceapi.nets.ssdMobilenetv1.loadFromDisk('./models');
     await faceapi.nets.faceLandmark68Net.loadFromDisk('./models');
     await faceapi.nets.faceRecognitionNet.loadFromDisk('./models');
 
     let facialDescriptors = [];
 
-    for (const imgBase64 of images) {
-      // Decode each base64 image to a tensor
+    for (const [index, imgBase64] of images.entries()) {
       const imgTensor = tf.node.decodeImage(
         Buffer.from(imgBase64.split(',')[1], 'base64'),
-        3, // 3 color channels (RGB)
-        'int32', // Output type
-        false // flip the image vertically
+        3,
+        'int32',
+        false
       );
 
-      // Detect and compute facial feature data for the image
       const detections = await faceapi
         .detectAllFaces(imgTensor)
         .withFaceLandmarks()
         .withFaceDescriptors();
 
-      // Add processed data to facialFeatures array
-      if (detections) {
-        facialDescriptors.push(detections.descriptor);
+      if (detections.length > 0) {
+        console.log('Detections for image', index);
+        facialDescriptors.push(...detections);
       }
 
-      // Dispose the tensor to free memory
       tf.dispose(imgTensor);
     }
 
-    const descriptorsString = JSON.stringify(facialDescriptors);
+    console.log('Facial Features: ', facialDescriptors);
 
     // Store in database
+    const descriptorsString = JSON.stringify(facialDescriptors);
     await prisma.knownFaces.upsert({
       where: { userId: user.id },
       update: { descriptors: descriptorsString },
       create: { userId: user.id, descriptors: descriptorsString },
     });
 
-    res.status(200).json({ message: 'Facial data stored successfully' });
-    console.log('FACIAL FEATURES'.rainbow.bold);
-    console.log(facialDescriptors);
-    console.log(facialDescriptors.map((f) => f[0].descriptor));
-
     res.status(200).json({ recognized: true, features: facialDescriptors });
+  } else {
+    res.setHeader('Allow', ['POST']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
