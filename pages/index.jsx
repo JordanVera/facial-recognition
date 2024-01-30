@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Inter } from 'next/font/google';
 import WebcamCapture from '@/components/WebcamCapture';
 import LoginCard from '@/components/LoginCard';
-import SignupCard from '@/components/SignupCard';
 import FacialRecognition from '@/components/FacialRecognition';
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,17 +25,12 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center justify-center p-24 ${inter.className} bg-[#121212]`}
     >
-      {loginOrSignup === 'login' && (
-        <LoginCard
-          setOnboarding={setOnboarding}
-          isRecognizing={isRecognizing}
-          setIsRecognizing={setIsRecognizing}
-          startRecognition={startRecognition}
-        />
-      )}
-      {loginOrSignup === 'signup' && (
-        <SignupCard setOnboarding={setOnboarding} />
-      )}
+      <LoginCard
+        setOnboarding={setOnboarding}
+        isRecognizing={isRecognizing}
+        setIsRecognizing={setIsRecognizing}
+        startRecognition={startRecognition}
+      />
 
       <WebcamCapture onboarding={onboarding} setOnboarding={setOnboarding} />
 
